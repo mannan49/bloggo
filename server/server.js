@@ -21,7 +21,7 @@ const app = express();
 // middlewares
 app.use(
   cors({
-    origin: ["https://bloggo-client.vercel.app"],
+    origin: ["https://bloggo-front.vercel.app"],
     methods: ["POST", "GET", "PUT", "DELETE"],
     credentials: true,
   })
