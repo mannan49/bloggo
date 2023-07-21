@@ -1,1 +1,1 @@
-export const apiBaseUrl = "http://localhost:8000";
+export const apiBaseUrl = "https://bloggo-six.vercel.app/";
