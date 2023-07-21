@@ -36,6 +36,10 @@ app.use("/api/v1/blog", blogRoutes);
 
 // port
 
+app.get("/", (req, res) => {
+  res.json("Hello");
+});
+
 const PORT = process.env.PORT || 8080;
 
 // listen
