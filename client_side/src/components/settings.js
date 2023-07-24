@@ -1,1 +1,1 @@
-export const apiBaseUrl = "https://bloggo-api.vercel.app/";
+export const apiBaseUrl = "https://bloggo-api.vercel.app";
