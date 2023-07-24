@@ -18,17 +18,16 @@ connectDB();
 
 // rest object
 const app = express();
+app.use(express.json());
+app.use(morgan("dev"));
 // middlewares
 app.use(
   cors({
     origin: ["https://bloggo-front.vercel.app"],
-    methods: ["POST", "GET", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
-
-app.use(express.json());
-app.use(morgan("dev"));
 
 // routes
 app.use("/api/v1/user", userRoutes);
