@@ -5,6 +5,7 @@ import axios from "axios";
 import { apiBaseUrl } from "./settings";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
+import { ImBlog } from "react-icons/im";
 
 function Login() {
   const navigate = useNavigate();
@@ -14,9 +15,7 @@ function Login() {
     email: "",
     password: "",
   });
-  useEffect(() => {
-    console.log(isLogin); // Log the updated value of isLogin
-  }, [isLogin]);
+  useEffect(() => {}, [isLogin]);
   const handleChange = (e) => {
     setInputs((prevState) => ({
       ...prevState,
@@ -32,10 +31,10 @@ function Login() {
       });
       if (data.success) {
         localStorage.setItem("userId", data.user._id);
-        dispatch(login());
+        dispatch(login({ name: data.user.username, email: data.user.email }));
         navigate("/");
-        toast.success(`Welcome Bhai Jaan`, {
-          duration: 3000,
+        toast.success(`User Logged In Successfully`, {
+          duration: 1500,
         });
       }
     } catch (error) {
@@ -46,11 +45,9 @@ function Login() {
     <div>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-10 w-auto"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            alt="Your Company"
-          />
+          <div>
+            <ImBlog className="mx-auto text-3xl text-green-700" />
+          </div>
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
             Log in to your account
           </h2>
@@ -74,7 +71,7 @@ function Login() {
                   onChange={handleChange}
                   autoComplete="email"
                   required
-                  className="block w-full rounded-md border-0  px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0  px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -87,14 +84,6 @@ function Login() {
                 >
                   Password
                 </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  >
-                    Forgot password?
-                  </a>
-                </div>
               </div>
               <div className="mt-2">
                 <input
@@ -104,7 +93,7 @@ function Login() {
                   type="password"
                   onChange={handleChange}
                   required
-                  className="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full rounded-md border-0 px-3 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -112,7 +101,7 @@ function Login() {
             <div>
               <button
                 type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                className="flex w-full justify-center rounded-md bg-green-700 px-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Log in
               </button>
@@ -123,7 +112,7 @@ function Login() {
             Not a member?{" "}
             <Link
               to="/register"
-              className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+              className="font-semibold leading-6 text-green-700 hover:text-green-500"
             >
               Create an Account
             </Link>

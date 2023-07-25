@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function UserBlogs() {
   const [userBlogs, setUserBlogs] = useState([]);
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
 
   const handleEdit = (blogId, userId) => {
@@ -36,6 +37,7 @@ export default function UserBlogs() {
       );
       if (data.success) {
         setUserBlogs(data.userBlog.blogs);
+        setUserName(data.userBlog.username);
       }
     } catch (error) {
       console.log(error);
@@ -61,8 +63,6 @@ export default function UserBlogs() {
       createdAt: formattedDate,
     };
   });
-
-  console.log(formattedBlogs); // Check the formattedBlogs array in the console
   return (
     <div className="bg-white py-5">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -81,7 +81,11 @@ export default function UserBlogs() {
                 key={post._id}
                 className="flex max-w-xl flex-col items-start justify-between"
               >
-                <img className="rounded-lg" src={post.image} alt="" />
+                <img
+                  className="rounded-lg object-cover h-56 w-full"
+                  src={post.image}
+                  alt=""
+                />
                 <div className="flex items-center gap-x-4 text-xs">
                   <time className="text-gray-500">{post.createdAt}</time>
                 </div>
@@ -122,7 +126,7 @@ export default function UserBlogs() {
                   <div className="text-sm leading-6">
                     <p className="font-semibold text-gray-900">
                       <span className="absolute inset-0" />
-                      POST. AUTHOR NAME
+                      {userName}
                     </p>
                   </div>
                 </div>

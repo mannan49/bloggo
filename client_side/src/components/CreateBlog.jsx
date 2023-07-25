@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
   const navigate = useNavigate();
+
   const [inputs, setInputs] = useState({
     title: "",
     description: "",
     image: "",
     user: "",
+    name: "",
   });
 
   const handleChange = (e) => {

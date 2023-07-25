@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 exports.getAllBlogsController = async (req, res) => {
   try {
-    const blogs = await blogModel.find({});
+    const blogs = await blogModel.find({}).populate("user", "username");
     if (!blogs) {
       return res.status(200).send({
         success: false,
@@ -30,7 +30,7 @@ exports.getAllBlogsController = async (req, res) => {
 exports.getBlogByIdController = async (req, res) => {
   try {
     const { id } = req.params;
-    const blog = await blogModel.findById(id);
+    const blog = await blogModel.findById(id).populate("user", "username");
     if (!blog) {
       return res.status(404).send({
         success: false,
@@ -77,12 +77,14 @@ exports.createBlogController = async (req, res) => {
     existingUser.blogs.push(newBlog);
     await existingUser.save({ session });
     await session.commitTransaction();
-
     await newBlog.save();
+    const populatedBlog = await blogModel
+      .findById(newBlog._id)
+      .populate("user", "username");
     return res.status(200).send({
       success: true,
       message: "Blog has been created",
-      newBlog,
+      newBlog: populatedBlog,
     });
   } catch (error) {
     console.log(error);
@@ -98,11 +100,9 @@ exports.updateBlogController = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, image } = req.body;
-    const blog = await blogModel.findByIdAndUpdate(
-      id,
-      { ...req.body },
-      { new: true }
-    );
+    const blog = await blogModel
+      .findByIdAndUpdate(id, { title, description, image }, { new: true })
+      .populate("user", "username");
     return res.status(200).send({
       success: true,
       message: "Blog updated",
@@ -152,13 +152,21 @@ exports.deleteBlogController = async (req, res) => {
 
 exports.userBlogController = async (req, res) => {
   try {
-    const userBlog = await userModel.findById(req.params.id).populate("blogs");
+    const userBlog = await userModel.findById(req.params.id).populate({
+      path: "blogs",
+      populate: {
+        path: "user",
+        select: "username", // Include only the 'username' field of the user in the populated blogs
+      },
+    });
+
     if (!userBlog) {
       return res.status(404).send({
         success: false,
-        message: "BLogs not found with this ID",
+        message: "Blogs not found with this ID",
       });
     }
+
     return res.status(200).send({
       success: true,
       message: "Blogs of user found",

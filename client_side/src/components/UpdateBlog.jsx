@@ -49,7 +49,6 @@ const UpdateBlog = () => {
   useEffect(() => {
     getBlogById();
   }, [id]);
-  console.log(singleBlog);
   return (
     <div className="max-w-lg mx-auto mt-3">
       <form
@@ -115,7 +114,7 @@ const UpdateBlog = () => {
             className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Create Blog
+            Update Blog
           </button>
         </div>
       </form>

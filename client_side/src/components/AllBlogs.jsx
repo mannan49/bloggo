@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { apiBaseUrl } from "./settings";
+import { useSelector } from "react-redux";
 
 export default function AllBlogs() {
   const [blogs, setBlogs] = useState([]);
+  const userName = useSelector((state) => state.auth.user.name);
   const getAllBlogs = async () => {
     try {
       const { data } = await axios.get(`${apiBaseUrl}/api/v1/blog/all-blogs`);
@@ -17,9 +19,6 @@ export default function AllBlogs() {
   useEffect(() => {
     getAllBlogs();
   }, []);
-  useEffect(() => {
-    console.log(blogs);
-  }, [blogs]);
   const formattedBlogs = blogs.map((blog) => {
     const formattedDate = new Date(blog.createdAt).toLocaleDateString("en-US", {
       day: "numeric",
@@ -36,8 +35,8 @@ export default function AllBlogs() {
     <div className="bg-white py-5">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:mx-0">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            From the blog
+          <h2 className="text-lg font-bold tracking-tight text-gray-900 sm:text-3xl">
+            Welcome {userName} to Bloggo
           </h2>
           <p className="mt-2 text-lg leading-8 text-gray-600">
             Learn how to grow your business with our expert advice.
@@ -49,7 +48,11 @@ export default function AllBlogs() {
               key={post._id}
               className="flex max-w-xl flex-col items-start justify-between"
             >
-              <img className="rounded-lg" src={post.image} alt="" />
+              <img
+                className="rounded-lg object-cover h-56 w-full"
+                src={post.image}
+                alt=""
+              />
               <div className="flex items-center gap-x-4 text-xs">
                 <time className="text-gray-500">{post.createdAt}</time>
               </div>
@@ -71,7 +74,7 @@ export default function AllBlogs() {
                 <div className="text-sm leading-6">
                   <p className="font-semibold text-gray-900">
                     <span className="absolute inset-0" />
-                    POST. AUTHOR NAME
+                    {post.user.username}
                   </p>
                 </div>
               </div>

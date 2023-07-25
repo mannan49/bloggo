@@ -7,6 +7,8 @@ import { MdCreateNewFolder } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../redux/authSlice";
 import { toast } from "react-hot-toast";
+import { ImBlog } from "react-icons/im";
+import { login } from "../redux/authSlice";
 
 const user = {
   name: "Tom Cook",
@@ -24,11 +26,12 @@ function Navbar({ children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLogin = useSelector((state) => state.auth.isLogin);
+  const userName = useSelector((state) => state.auth.user.name);
+  const userEmail = useSelector((state) => state.auth.user.email);
 
   const handleLogOut = () => {
     dispatch(logout());
     toast.success(`User Logged Out Successfully `);
-    console.log(isLogin);
     navigate("/login");
   };
   return (
@@ -42,11 +45,7 @@ function Navbar({ children }) {
                   <Link to="/">
                     <div className="flex items-center">
                       <div className="flex-shrink-0">
-                        <img
-                          className="h-8 w-8"
-                          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                          alt="Your Company"
-                        />
+                        <ImBlog className="mx-auto text-2xl text-white" />
                       </div>
                       <span className="text-white font-bold text-lg ml-4">
                         Bloggo
@@ -164,10 +163,10 @@ function Navbar({ children }) {
                       </div>
                       <div className="ml-3">
                         <div className="text-base font-medium leading-none text-white">
-                          {user.name}
+                          {userName}
                         </div>
                         <div className="text-sm font-medium leading-none text-gray-400">
-                          {user.email}
+                          {userEmail}
                         </div>
                       </div>
                     </div>
