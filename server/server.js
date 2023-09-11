@@ -23,7 +23,7 @@ app.use(morgan("dev"));
 // middlewares
 app.use(
   cors({
-    origin: ["https://bloggo-front.vercel.app"],
+    origin: ["https://bloggo-front.vercel.app", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
