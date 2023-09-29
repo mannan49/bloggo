@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 export default function UserBlogs() {
   const [userBlogs, setUserBlogs] = useState([]);
   const [userName, setUserName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleEdit = (blogId, userId) => {
@@ -15,6 +16,12 @@ export default function UserBlogs() {
   };
 
   const handleDelete = async (blogId, userId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to DELETE this Blog?"
+    );
+    if (!confirmDelete) {
+      return; // User canceled, do nothing
+    }
     try {
       const { data } = await axios.delete(
         `${apiBaseUrl}/api/v1/blog//delete-blog/${blogId}`
@@ -25,7 +32,9 @@ export default function UserBlogs() {
         navigate("/user-blog");
       }
     } catch (error) {
-      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
