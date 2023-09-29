@@ -4,9 +4,15 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { apiBaseUrl } from "./settings";
 import { ImBlog } from "react-icons/im";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
+import Loader from "./Loader";
+
 
 function Signup() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const [inputs, setInputs] = useState({
     name: "",
     email: "",
@@ -23,19 +29,30 @@ function Signup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const { data } = await axios.post(`${apiBaseUrl}/api/v1/user/register`, {
         username: inputs.name,
         email: inputs.email,
         password: inputs.password,
       });
       if (data.success) {
-        toast.success("User Register Successfully", {
-          duration: 3000,
+        const { data } = await axios.post(`${apiBaseUrl}/api/v1/user/login`, {
+          email: inputs.email,
+          password: inputs.password,
         });
-        navigate("/login");
+        if (data.success) {
+          localStorage.setItem("userId", data.user._id);
+          dispatch(login({ name: data.user.username, email: data.user.email }));
+          navigate("/");
+          toast.success(`User Logged In Successfully`, {
+            duration: 1500,
+          });
+        }
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
@@ -120,7 +137,7 @@ function Signup() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-green-600 px-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
               >
-                Sign Up
+                 {isLoading ? <Loader /> : "Sign Up"}
               </button>
             </div>
           </form>

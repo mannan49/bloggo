@@ -6,10 +6,12 @@ import { apiBaseUrl } from "./settings";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/authSlice";
 import { ImBlog } from "react-icons/im";
+import Loader from "./Loader";
 
 function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const isLogin = useSelector((state) => state.auth.isLogin);
   const [inputs, setInputs] = useState({
     email: "",
@@ -25,6 +27,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true); // Start loading
       const { data } = await axios.post(`${apiBaseUrl}/api/v1/user/login`, {
         email: inputs.email,
         password: inputs.password,
@@ -39,6 +42,8 @@ function Login() {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
   return (
@@ -103,7 +108,7 @@ function Login() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-green-700 px-3 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Log in
+                {isLoading ? <Loader /> : "Log In"}
               </button>
             </div>
           </form>
