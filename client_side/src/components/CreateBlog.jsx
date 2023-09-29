@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import { apiBaseUrl } from "./settings";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import Loader from './Loader';
 
 const CreateBlog = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [inputs, setInputs] = useState({
     title: "",
@@ -25,6 +27,7 @@ const CreateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true)
       const id = localStorage.getItem("userId");
       const { data } = await axios.post(
         `${apiBaseUrl}/api/v1/blog/create-blog`,
@@ -41,6 +44,8 @@ const CreateBlog = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -109,7 +114,7 @@ const CreateBlog = () => {
             className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Create Blog
+            {isLoading ? <Loader /> : "Create Blog"}
           </button>
         </div>
       </form>

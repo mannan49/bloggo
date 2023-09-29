@@ -3,9 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { apiBaseUrl } from "./settings";
 import { toast } from "react-hot-toast";
+import Loader from './Loader';
 
 const UpdateBlog = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const [singleBlog, setSingleBlog] = useState({});
   const { id } = useParams();
   const handleChange = (e) => {
@@ -17,6 +19,7 @@ const UpdateBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true)
       const { data } = await axios.put(
         `${apiBaseUrl}/api/v1/blog/update-blog/${id}`,
         {
@@ -32,6 +35,8 @@ const UpdateBlog = () => {
       }
     } catch (error) {
       console.log(error);
+    } finally{
+      setIsLoading(false)
     }
   };
   const getBlogById = async () => {
@@ -114,7 +119,7 @@ const UpdateBlog = () => {
             className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="submit"
           >
-            Update Blog
+            {isLoading ? <Loader /> : "Update Blog"}
           </button>
         </div>
       </form>
